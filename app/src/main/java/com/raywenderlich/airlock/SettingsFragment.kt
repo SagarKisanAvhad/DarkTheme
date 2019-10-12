@@ -32,6 +32,7 @@ package com.raywenderlich.airlock
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -65,11 +66,16 @@ class SettingsFragment : DialogFragment(), RadioGroup.OnCheckedChangeListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (isPreAndroid10()) {
+            system.text = getString(R.string.battery_saver)
+        }
+
         pref = activity!!.getSharedPreferences(Constants.PREFS_MODE, Context.MODE_PRIVATE)
         when (pref.getInt(Constants.MODE_KEY, 0)) {
             Mode.LIGHT.ordinal -> light.isChecked = true
             Mode.DARK.ordinal -> dark.isChecked = true
-            Mode.SYSTEM.ordinal -> system.isChecked = true
+            Mode.SYSTEM.ordinal, Mode.BATTERY.ordinal -> system.isChecked = true
             else -> light.isChecked = true
         }
         modeGroup.setOnCheckedChangeListener(this)
@@ -80,14 +86,24 @@ class SettingsFragment : DialogFragment(), RadioGroup.OnCheckedChangeListener {
         when (checkedId) {
             R.id.light -> switchToMode(AppCompatDelegate.MODE_NIGHT_NO, Mode.LIGHT)
             R.id.dark -> switchToMode(AppCompatDelegate.MODE_NIGHT_YES, Mode.DARK)
-            R.id.system -> switchToMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, Mode.SYSTEM)
+            R.id.system -> {
+                if (isPreAndroid10()) {
+                    switchToMode(AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY, Mode.BATTERY)
+                } else {
+                    switchToMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, Mode.SYSTEM)
+                }
+            }
+
         }
     }
+
 
     private fun switchToMode(nightMode: Int, mode: Mode) {
         AppCompatDelegate.setDefaultNightMode(nightMode)
         pref.edit().putInt(Constants.MODE_KEY, mode.ordinal).apply()
         dismiss()
     }
+
+    private fun isPreAndroid10() = Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
 
 }

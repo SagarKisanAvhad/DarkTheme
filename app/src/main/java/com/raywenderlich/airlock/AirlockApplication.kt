@@ -42,6 +42,7 @@ class AirlockApplication : Application() {
           Mode.LIGHT.ordinal -> AppCompatDelegate.MODE_NIGHT_NO
           Mode.DARK.ordinal -> AppCompatDelegate.MODE_NIGHT_YES
           Mode.SYSTEM.ordinal -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+          Mode.BATTERY.ordinal -> AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY
           else -> AppCompatDelegate.MODE_NIGHT_NO
       }
       AppCompatDelegate.setDefaultNightMode(nightMode)
