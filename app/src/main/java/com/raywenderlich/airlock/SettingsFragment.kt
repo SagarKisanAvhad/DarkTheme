@@ -87,6 +87,7 @@ class SettingsFragment : DialogFragment(), RadioGroup.OnCheckedChangeListener {
     private fun switchToMode(nightMode: Int, mode: Mode) {
         AppCompatDelegate.setDefaultNightMode(nightMode)
         pref.edit().putInt(Constants.MODE_KEY, mode.ordinal).apply()
+        dismiss()
     }
 
 }
