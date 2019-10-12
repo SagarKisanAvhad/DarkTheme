@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Astronaut" parent="AppTheme">
+        <item name="android:src">@drawable/astronaut</item>
+    </style>
+
+    <style name="MessageText" parent="AppTheme">
+        <item name="android:text">@string/to_the_moon</item>
+    </style>
+</resources>
